@@ -3,7 +3,7 @@
 ##
 image:
   repository: redis
-  tag: 5.0.6-alpine
+  tag: tag: 6.2.6-alpine
   pullPolicy: IfNotPresent
 
 ## Reference to one or more secrets to be used when pulling images
@@ -14,7 +14,7 @@ imagePullSecrets: []
 # - name: "image-pull-secret"
 
 ## replicas number for each component
-replicas: 3
+replicas: 1
 
 ## Kubernetes priorityClass name for the redis-ha-server pod
 # priorityClassName: ""
@@ -151,7 +151,7 @@ redis:
     ## Additional redis conf options can be added below
     ## For all available options see http://download.redis.io/redis-stable/redis.conf
     min-replicas-to-write: 1
-    min-replicas-max-lag: 5   # Value in seconds
+    min-replicas-max-lag: 0   # Value in seconds
     maxmemory: "0"       # Max memory to use for each redis instance. Default is unlimited.
     maxmemory-policy: "volatile-lru"  # Max memory policy to use for each redis instance. Default is volatile-lru.
     # Determines if scheduled RDB backups are created. Default is false.
@@ -211,7 +211,8 @@ securityContext:
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-nodeSelector: {}
+nodeSelector:
+  agentpool: sbworkers
 
 ## Whether the Redis server pods should be forced to run on separate nodes.
 ## This is accomplished by setting their AntiAffinity with requiredDuringSchedulingIgnoredDuringExecution as opposed to preferred.
@@ -340,7 +341,7 @@ persistentVolume:
   # storageClass: "-"
   accessModes:
     - ReadWriteOnce
-  size: 10Gi
+  size: 20Gi
   annotations: {}
   # reclaimPolicy per https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaiming
   reclaimPolicy: ""
